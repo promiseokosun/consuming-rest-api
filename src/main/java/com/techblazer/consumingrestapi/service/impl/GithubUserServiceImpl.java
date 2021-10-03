@@ -2,6 +2,7 @@ package com.techblazer.consumingrestapi.service.impl;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.Gson;
 import com.techblazer.consumingrestapi.dto.UserResponse;
 import com.techblazer.consumingrestapi.service.GithubUserService;
 import lombok.extern.slf4j.Slf4j;
@@ -43,10 +44,13 @@ public class GithubUserServiceImpl implements GithubUserService {
     public Object getUserByUsername(String username) throws JsonProcessingException {
         ResponseEntity<String> response = restTemplate.getForEntity(GITHUB_USER_API +"/"+ username, String.class);
 
-        ObjectMapper mapper = new ObjectMapper();
+//        ObjectMapper mapper = new ObjectMapper();
+        Gson gson = new Gson();
 
         if (response.getStatusCodeValue() == 200) {
-            Map<String, Object> userMap = mapper.readValue(response.getBody(), HashMap.class);
+            String bodyJson = response.getBody();
+//            Map<String, Object> userMap = mapper.readValue(bodyJson, HashMap.class);
+            Map<String, Object> userMap = gson.fromJson(bodyJson, HashMap.class);
             String name = String.valueOf(userMap.get("name"));
             String company = String.valueOf(userMap.get("company"));
             String email = String.valueOf(userMap.get("email"));
@@ -65,7 +69,7 @@ public class GithubUserServiceImpl implements GithubUserService {
 
         // request was not successful
 
-        return new ResponseEntity<>(response.getBody(), HttpStatus.OK);
+        return null;
     }
 
 
