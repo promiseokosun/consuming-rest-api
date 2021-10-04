@@ -1,11 +1,16 @@
 package com.techblazer.consumingrestapi.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import org.springframework.http.ResponseEntity;
+
 
 public interface GithubUserService {
 
-    ResponseEntity<String> getUsers();
+    Object getUsers();
+
+    Object getUsersV2();
 
     Object getUserByUsername(String username) throws JsonProcessingException;
+
+
+    Object getUserByUsernameV2(String username) throws JsonProcessingException;
 }

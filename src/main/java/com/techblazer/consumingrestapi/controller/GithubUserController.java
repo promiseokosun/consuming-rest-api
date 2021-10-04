@@ -1,6 +1,7 @@
 package com.techblazer.consumingrestapi.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.techblazer.consumingrestapi.dto.BaseResponse;
 import com.techblazer.consumingrestapi.service.GithubUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,15 +19,13 @@ public class GithubUserController {
     private GithubUserService githubUserService;
 
     @GetMapping
-    public ResponseEntity<?> getUsers() {
-        ResponseEntity<String> usersStr = githubUserService.getUsers();
-
-
-        return new ResponseEntity<>(usersStr, HttpStatus.OK);
+    public ResponseEntity<BaseResponse> getUsers() {
+        Object users = githubUserService.getUsersV2();
+        return new ResponseEntity<>(BaseResponse.successResponse(users), HttpStatus.OK);
     }
 
     @GetMapping("{username}")
-    public ResponseEntity<?> getUser(@PathVariable("username") String username) {
+    public ResponseEntity<BaseResponse> getUser(@PathVariable("username") String username) {
         Object user = null;
         try {
             user = githubUserService.getUserByUsername(username);
@@ -34,7 +33,7 @@ public class GithubUserController {
             e.printStackTrace();
         }
 
-        return new ResponseEntity<>(user, HttpStatus.OK);
+        return new ResponseEntity<>(BaseResponse.successResponse(user), HttpStatus.OK);
     }
 
 }
